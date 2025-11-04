@@ -70,12 +70,14 @@ public class RestaurantServices {
         return cityMapper.create(city);
     }
 
+    /*
     public Restaurant createRestaurant(String name, String description, String website, String street, City city, RestaurantType restaurantType) {
         Restaurant restaurant = new Restaurant(name, description, website, street, city, restaurantType);
         city.getRestaurants().add(restaurant);
         restaurantType.getRestaurants().add(restaurant);
         return restaurantMapper.create(restaurant);
     }
+     */
 
     public BasicEvaluation createBasicEvaluation(Restaurant restaurant, Boolean like) {
         String ipAddress;
