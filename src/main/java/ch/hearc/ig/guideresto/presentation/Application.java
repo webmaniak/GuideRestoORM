@@ -27,6 +27,8 @@ public class Application {
         EntityTransaction transaction = em.getTransaction();
         City city1 = em.find(City.class, 1);
         System.out.println(city1.getCityName());
+        Evaluation be = em.find(BasicEvaluation.class, 7);
+        System.out.println(((BasicEvaluation)be).getIpAddress() + " - " + be.getVisitDate());
         em.close();
 
         // end test
