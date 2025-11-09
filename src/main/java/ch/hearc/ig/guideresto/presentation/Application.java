@@ -2,6 +2,9 @@ package ch.hearc.ig.guideresto.presentation;
 
 import ch.hearc.ig.guideresto.business.*;
 import ch.hearc.ig.guideresto.persistence.FakeItems;
+import ch.hearc.ig.guideresto.persistence.jpa.JpaUtils;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityTransaction;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -19,6 +22,15 @@ public class Application {
     private static final Logger logger = LogManager.getLogger(Application.class);
 
     public static void main(String[] args) {
+        // start test
+        EntityManager em = JpaUtils.getEntityManager();
+        EntityTransaction transaction = em.getTransaction();
+        City city1 = em.find(City.class, 1);
+        System.out.println(city1.getCityName());
+        em.close();
+
+        // end test
+
         scanner = new Scanner(System.in);
 
         System.out.println("Bienvenue dans GuideResto ! Que souhaitez-vous faire ?");

@@ -15,11 +15,13 @@ public class City implements IBusinessObject {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE,
         generator = "seq_villes")
+    @SequenceGenerator(name="seq_villes", sequenceName = "seq_villes",
+            initialValue = 1, allocationSize = 1)
     @Column(name="numero", length=10)
     private Integer id;
     @Column(name="code_postal", nullable=false, length=100)
     private String zipCode;
-    @Column(name="code_postal", nullable=false, length=100)
+    @Column(name="nom_ville", nullable=false, length=100)
     private String cityName;
     @Transient
     private Set<Restaurant> restaurants;
