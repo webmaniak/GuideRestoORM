@@ -1,5 +1,6 @@
 package ch.hearc.ig.guideresto.business;
 
+import jakarta.persistence.*;
 import org.apache.commons.collections4.CollectionUtils;
 
 import java.util.HashSet;
@@ -8,29 +9,41 @@ import java.util.Set;
 /**
  * @author cedric.baudet
  */
+@Entity
+@Table(name="RESTAURANTS")
 public class Restaurant implements IBusinessObject {
 
+    @Id
+    @GeneratedValue(strategy= GenerationType.SEQUENCE,
+        generator="SEQ_RESTAURANTS")
+    @SequenceGenerator(name="SEQ_RESTAURANTS", sequenceName="SEQ_RESTAURANTS",
+        initialValue=1, allocationSize=1)
+    @Column(name="numero", length=10)
     private Integer id;
+    @Column(name="name", length=10)
     private String name;
+    @Column(name="description", length=500)
     private String description;
+    @Column(name="site_web", length=100)
     private String website;
+
+    //@Transient
+    @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Evaluation> evaluations;
+
+
+    @ManyToOne
+    @JoinColumn(name="fk_vill",nullable = false)
     private Localisation address;
+
+    @ManyToOne
+    @JoinColumn(name = "fk_type")
     private RestaurantType type;
 
     public Restaurant() {
         this(null, null, null, null, null, null);
     }
 
-    public Restaurant(Integer id, String name, String description, String website, String street, City city, RestaurantType type) {
-        this.id = id;
-        this.name = name;
-        this.description = description;
-        this.website = website;
-        this.evaluations = new HashSet();
-        this.address = new Localisation(street, city);
-        this.type = type;
-    }
 
     public Restaurant(Integer id, String name, String description, String website, Localisation address, RestaurantType type) {
         this.id = id;
