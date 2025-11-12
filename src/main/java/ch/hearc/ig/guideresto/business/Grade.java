@@ -18,10 +18,10 @@ public class Grade implements IBusinessObject {
     @Column(name="NOTE", nullable=false)
     private Integer grade;
     
-    @Column(name="FK_COMM", nullable=false)
+    @Transient
     private CompleteEvaluation evaluation;
-    
-    @Column(name="FK_CRIT", nullable=false)
+   
+   @Transient
     private EvaluationCriteria criteria;
 
     public Grade() {

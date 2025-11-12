@@ -24,7 +24,11 @@ public class Application {
         scanner = new Scanner(System.in);
        
        EntityManager entityManager =JpaUtils.getEntityManager();
-        
+       
+       City city1 = entityManager.find(City.class, 1);
+       System.out.println(city1.getCityName());
+       entityManager.close();
+       
         System.out.println("Bienvenue dans GuideResto ! Que souhaitez-vous faire ?");
         int choice;
         do {
