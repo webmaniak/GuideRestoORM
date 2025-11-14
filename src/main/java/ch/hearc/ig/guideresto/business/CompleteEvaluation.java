@@ -1,6 +1,6 @@
 package ch.hearc.ig.guideresto.business;
 
-/**
+/*
  * @author cedric.baudet
  */
 
@@ -10,8 +10,13 @@ import java.util.Set;
 
 public class CompleteEvaluation extends Evaluation {
 
+    @Column(name="COMMENTAIRE")
     private String comment;
+
+    @Column(name="NOM_UTILISATEUR", nullable=false)
     private String username;
+
+    @OneToMany(mappedBy = "grade")
     private Set<Grade> grades;
 
     public CompleteEvaluation() {

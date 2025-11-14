@@ -1,14 +1,32 @@
 package ch.hearc.ig.guideresto.business;
 
+import jakarta.persistence.*;
+
 /**
  * @author cedric.baudet
  */
+@Entity
+@Table(name="NOTES")
 public class Grade implements IBusinessObject {
-
+    
+    @Id
+    @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="SEQ_NOTES")
+    @SequenceGenerator(name="SEQ_NOTES", sequenceName="SEQ_NOTES", initialValue=1, allocationSize=1)
+    @Column(name="NUMERO")
     private Integer id;
+    
+    @Column(name="NOTE", nullable=false)
     private Integer grade;
-    private CompleteEvaluation evaluation;
-    private EvaluationCriteria criteria;
+
+    @ManyToOne
+    @JoinColumn(name="FK_COMM", nullable=false)
+   // @Transient
+    private CompleteEvaluation evaluation; //TABLE COMMENTAIRES FK_COMM POINTE SUR NUMERO
+
+    @ManyToOne
+    @JoinColumn(name="FK_CRIT", nullable=false)
+  // @Transient
+    private EvaluationCriteria criteria; //TABLE CRITERES_EVALUATION FK_CRIT POINTE SUR NUMERO
 
     public Grade() {
         this(null, null, null);
