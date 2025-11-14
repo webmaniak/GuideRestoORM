@@ -13,7 +13,7 @@ public class CompleteEvaluation extends Evaluation {
     @Column(name="COMMENTAIRE")
     private String comment;
 
-    @Columns(name="NOM_UTILISATEUR", nullable=false)
+    @Column(name="NOM_UTILISATEUR", nullable=false)
     private String username;
 
     @OneToMany(mappedBy = "grade")
