@@ -23,10 +23,11 @@ public class RestaurantType implements IBusinessObject {
     @Column(name="libelle", nullable = false, length = 100)
     private String label;
 
-    @Column(name="description", length = 500)
+    @Lob //a nouveau je crois que ça marche mais j'ai pas vraiment de réseau pour tester et en soit je m'en fiche ???
+    @Column(name="description")
     private String description;
 
-    @OneToMany(mappedBy = "restaurantType")
+    @OneToMany(mappedBy = "type") //t'avais raison matthieu j'ai compris mon erreur 🙂‍↕️🙂‍↕️
     private Set<Restaurant> restaurants;
 
     public RestaurantType() {

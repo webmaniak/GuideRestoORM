@@ -20,20 +20,22 @@ public class Restaurant implements IBusinessObject {
         initialValue=1, allocationSize=1)
     @Column(name="numero", length=10)
     private Integer id;
-    @Column(name="name", length=10)
+    @Column(name="nom", length=100)
     private String name;
+
+    @Lob //je crois que c'est ça pour Lob, en ttout cas c'est ce que me dit stackoverflow
     @Column(name="description", length=500)
     private String description;
     @Column(name="site_web", length=100)
     private String website;
 
-    //@Transient
     @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Evaluation> evaluations;
 
 
-    @ManyToOne
-    @JoinColumn(name="fk_vill",nullable = false)
+    @ElementCollection
+    @CollectionTable(name="VILLES",
+        joinColumns = @JoinColumn(name="fk_restaurant")) //je sais que ça existe pas matthieu, crève
     private Localisation address;
 
     @ManyToOne
