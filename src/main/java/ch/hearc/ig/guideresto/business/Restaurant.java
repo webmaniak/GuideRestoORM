@@ -33,9 +33,7 @@ public class Restaurant implements IBusinessObject {
     private Set<Evaluation> evaluations;
 
 
-    @ElementCollection
-    @CollectionTable(name="VILLES",
-        joinColumns = @JoinColumn(name="fk_restaurant")) //je sais que ça existe pas matthieu, crève
+    @Embedded
     private Localisation address;
 
     @ManyToOne
