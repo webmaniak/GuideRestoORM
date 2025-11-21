@@ -1,6 +1,6 @@
 package ch.hearc.ig.guideresto.persistence;
 
-import ch.hearc.ig.guideresto.business.IBusinessObject;
+import ch.hearc.ig.guideresto.business.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -15,6 +15,7 @@ import java.util.Set;
 public abstract class AbstractMapper<T extends IBusinessObject> {
 
     protected static final Logger logger = LogManager.getLogger();
+    protected Map<Integer, IBusinessObject> cache = new HashMap<>();
 
     public abstract T findById(int id);
     public abstract Set<T> findAll();
@@ -93,16 +94,14 @@ public abstract class AbstractMapper<T extends IBusinessObject> {
      * @return true si le cache ne contient aucun objet, false sinon
      */
     protected boolean isCacheEmpty() {
-        // TODO à implémenter par vos soins
-        throw new UnsupportedOperationException("Vous devez implémenter votre cache vous-même !");
+        return this.cache.isEmpty();
     }
 
     /**
      * Vide le cache
      */
     protected void resetCache() {
-        // TODO à implémenter par vos soins
-        throw new UnsupportedOperationException("Vous devez implémenter votre cache vous-même !");
+        this.cache.clear();
     }
 
     /**
@@ -110,16 +109,54 @@ public abstract class AbstractMapper<T extends IBusinessObject> {
      * @param objet l'objet à ajouter
      */
     protected void addToCache(T objet) {
-        // TODO à implémenter par vos soins
-        throw new UnsupportedOperationException("Vous devez implémenter votre cache vous-même !");
+        int id = objet.getId();
+        this.cache.put(id, objet);
+        /* Selon le cours:
+        / Notez que la présence en cache est vérifiée 2 fois (findById et addToCache)
+        / – On s’assure ainsi de ne pas créer de doublon en mémoire; mieux vaut prévenir que guérir
+        / -> non je suis pas d'accord. Une map ne peut pas avoir de doublon de clé K, un put remplace la V existante
+         */
     }
 
     /**
      * Retire un objet du cache
      * @param id l'ID de l'objet à retirer du cache
      */
-    protected void removeFromCache(Integer id) {
-        // TODO à implémenter par vos soins
-        throw new UnsupportedOperationException("Vous devez implémenter votre cache vous-même !");
+    protected void removeFromCache(int id) {
+        this.cache.remove(id);
     }
+
+
+    // Méthodes pour charger un restaurant sont utilisées par plusieurs mappers: eager load depuis les évaluations
+    protected Restaurant loadRestaurant(ResultSet rs) throws SQLException {
+        City city = new City(rs.getInt("num_ville"),
+                rs.getString("code_postal"),
+                rs.getString("nom_ville"));
+        return this.loadRestaurant(rs, city);
+    }
+
+    protected Restaurant loadRestaurant(ResultSet rs, City city) throws SQLException {
+        RestaurantType type = new RestaurantType(rs.getInt("num_type"),
+                rs.getString("libelle"),
+                rs.getString("desc_type"));
+        return this.loadRestaurant(rs, city, type);
+    }
+    protected Restaurant loadRestaurant(ResultSet rs, RestaurantType type) throws SQLException {
+        City city = new City(rs.getInt("num_ville"),
+                rs.getString("code_postal"),
+                rs.getString("nom_ville"));
+        return this.loadRestaurant(rs, city, type);
+    }
+    protected Restaurant loadRestaurant(ResultSet rs, City city, RestaurantType type) throws SQLException {
+        Localisation address = new Localisation(rs.getString("adresse"), city);
+        Restaurant resto = new Restaurant(
+                rs.getInt("num_resto"),
+                rs.getString("nom"),
+                rs.getString("desc_resto"),
+                rs.getString("site_web"),
+                address,
+                type);
+        return resto;
+    }
+
 }
